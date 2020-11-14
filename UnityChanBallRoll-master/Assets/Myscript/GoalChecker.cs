@@ -8,6 +8,8 @@ public class GoalChecker : MonoBehaviour
 {
     public PlayerController playercontroller;
     public PlayerFollower playerfollower;
+    public TimerController timercontroller;
+    public GameObject unityChan_a;
     public GameObject unityChan;
     public AudioSource gameBgm;
     public AudioSource goalBgm;
@@ -30,6 +32,8 @@ public class GoalChecker : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        timercontroller.enabled = false;
+        timercontroller.timerText.SetActive(false);
         gameBgm.Stop();
         goalBgm.Play();
         Resultfunc();
@@ -42,10 +46,14 @@ public class GoalChecker : MonoBehaviour
     public void Resultfunc()
     {
         // iskinematic は物理演算無効
-        unityChan.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        unityChan_a.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         playerfollower.goal_flg = true;
         retryButton.SetActive(true);
-        if (playercontroller.count < judgecnt)
+        if (timercontroller.seconds == 0)
+        {
+            judgeText.text = "Time Up";
+        }
+        else if (playercontroller.count < judgecnt)
         {
             judgeText.text = "Lose";
         }
